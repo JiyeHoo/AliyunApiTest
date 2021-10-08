@@ -5,10 +5,36 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <EditText
+        android:id="@+id/et_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="area"
+        android:text="北京"/>
+
+    <EditText
+        android:id="@+id/et_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="type"
+        android:text="世界遗产"/>
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="name"
+        android:text="长城"/>
+
     <Button
         android:id="@+id/btn_get"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="get" />
+
+    <TextView
+        android:id="@+id/tv_res"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

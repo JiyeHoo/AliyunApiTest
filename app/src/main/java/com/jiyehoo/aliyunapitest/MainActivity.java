@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,31 +22,42 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = "###MainActivity";
-
+    private TextView mTvRes;
+    private EditText mEtArea;
+    private EditText mEtType;
+    private EditText mEtName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initView();
+    }
+
+    private void initView() {
+        mEtArea = findViewById(R.id.et_area);
+        mEtType = findViewById(R.id.et_type);
+        mEtName = findViewById(R.id.et_name);
+        mTvRes = findViewById(R.id.tv_res);
         findViewById(R.id.btn_get).setOnClickListener(this);
     }
 
-    private void startGet(String city, String page, String province, String spot) {
-        if (TextUtils.isEmpty(city) || TextUtils.isEmpty(city)
-                || TextUtils.isEmpty(city) || TextUtils.isEmpty(city)) {
+    private void startGet(String area, String page, String type, String name) {
+        Log.d(TAG, "开始请求");
+        if (TextUtils.isEmpty(page)) {
             Log.e(TAG, "startGet pram is null");
             return;
         }
 
-        String host = "https://scenicspot.market.alicloudapi.com";
-        String path = "/lianzhuo/scenicspot";
+        String host = "https://scenicinfo.market.alicloudapi.com";
+        String path = "/scenicInfo";
         String appcode = "a1c63ab9f2944bef99d643f6dc861a6c";
 
         Map<String, String> queryMap = new HashMap<>();
-        queryMap.put("city", city);
+        queryMap.put("area", area);
         queryMap.put("page", page);
-        queryMap.put("province", province);
-        queryMap.put("spot", spot);
+        queryMap.put("type", type);
+        queryMap.put("name", name);
 
         HttpUtil.INSTANCE.get(host + path, appcode, queryMap, new Callback() {
             @Override
@@ -54,7 +67,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.d(TAG, "成功:" + response.toString() + Objects.requireNonNull(response.body()).string());
+                String res = Objects.requireNonNull(response.body()).string();
+                Log.d(TAG, "成功:" + res);
+                runOnUiThread(() -> mTvRes.setText(res));
             }
         });
     }
@@ -62,11 +77,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btn_get) {
-            String city = "济南";
+            String area = mEtArea.getText().toString();
             String page = "1";
-            String province = "山东";
-            String spot = "五龙潭";
-            startGet(city, page, province, spot);
+            String type = mEtType.getText().toString(); // 【4】请求参数，详见文档描述
+            String name= mEtName.getText().toString(); // 【4】请求参数，详见文档描述
+            startGet(area, page, type, name);
         }
     }
 }

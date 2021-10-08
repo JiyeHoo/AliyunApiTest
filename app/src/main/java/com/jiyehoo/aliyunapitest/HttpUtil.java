@@ -13,7 +13,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
- * TODO feature
+ * 请求的封装
  *
  * @author aobing <a href="mailto:aobing.hu@tuya.com"/>
  * @since 2021/10/8 3:01 下午
@@ -40,6 +40,8 @@ public enum HttpUtil {
         HttpUrl.Builder httpBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         if (params != null) {
             for(Map.Entry<String, String> param : params.entrySet()) {
+                // 空的可选参数过滤
+                if (TextUtils.isEmpty(param.getValue())) continue;
                 httpBuilder.addQueryParameter(param.getKey(),param.getValue());
             }
         }
